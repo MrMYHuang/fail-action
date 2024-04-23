@@ -1,0 +1,43 @@
+# In TypeScript actions, `dist/` is a special directory. When you reference
+# an action with the `uses:` property, `dist/index.js` is the code that will be
+# run. For this project, the `dist/index.js` file is transpiled from other
+# source files. This workflow ensures the `dist/` directory contains the
+# expected transpiled code.
+#
+# If this workflow is run from a feature branch, it will act as an additional CI
+# check and fail if the checked-in `dist/` directory does not match what is
+# expected from the build.
+name: Check dist/
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  check-dist:
+    name: Check dist/
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Faile 1
+        if: ${{ success() }}
+        uses: MrMYHuang/fail-action@main
+
+      - name: Faile 2
+        if: ${{ failure() }}
+        uses: MrMYHuang/fail-action@main
+
+      - name: Faile 3
+        if: ${{ success() }}
+        uses: MrMYHuang/fail-action@main
